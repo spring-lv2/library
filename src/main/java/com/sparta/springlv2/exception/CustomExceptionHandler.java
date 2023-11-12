@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(UserDuplicatedException.class)
+    @ExceptionHandler(CustomDuplicatedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
-    public ResponseEntity<?> handleUserDuplicatedException() {
-        ErrorMessage errorMessage = new ErrorMessage("이미 존재하는 회원입니다.", 400);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+    public ResponseEntity<?> handleUserDuplicatedException(CustomDuplicatedException ex) {
+        ErrorMessage errorMessage = new ErrorMessage(ex.getMessage(), 400);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 
 }

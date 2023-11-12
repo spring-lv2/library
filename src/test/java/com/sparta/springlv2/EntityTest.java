@@ -30,7 +30,7 @@ public class EntityTest {
     void test1() {
         // 유저 생성
         User user = new User();
-        user.setUsername("TestUser");
+        user.setUserName("TestUser");
         user.setGender('M');
         user.setUserNumber("230101");
         user.setPhoneNumber("010-1234-1234");
@@ -48,8 +48,8 @@ public class EntityTest {
 
         // 대여
         Loan loan = new Loan();
-        loan.setUser_id(user.getId());
-        loan.setBook_id(book.getId());
+        loan.setUserId(user.getId());
+        loan.setBookId(book.getId());
 
         loanRepository.save(loan);
     }

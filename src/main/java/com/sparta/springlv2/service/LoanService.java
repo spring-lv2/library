@@ -2,12 +2,12 @@ package com.sparta.springlv2.service;
 
 import com.sparta.springlv2.dto.loan.LoanRequestDto;
 import com.sparta.springlv2.entity.Loan;
-import com.sparta.springlv2.exception.BookAlreadyLoanedException;
 import com.sparta.springlv2.exception.CustomDuplicatedException;
 import com.sparta.springlv2.repository.LoanRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -27,10 +27,8 @@ public class LoanService {
         Long userId = loan.getUserId();
         Long bookId = loan.getBookId();
 
-        // 대출 확인
+        // 대여 확인
         if (isLoanAlreadyExists(userId, bookId)) {
-            // 이미 대출 중인 경우에 대한 처리를 수행하고, 예를 들어 예외를 던지거나 적절한 응답을 반환할 수 있습니다.
-            // 여기서는 간단히 RuntimeException을 던지도록 했습니다.
             throw new CustomDuplicatedException("이미 대여된 책입니다.");
         }
 
@@ -38,6 +36,24 @@ public class LoanService {
         loanRepository.save(loan);
 
         return ResponseEntity.status(HttpStatus.OK).body("대여에 성공했습니다.");
+    }
+
+    @Transactional
+    public ResponseEntity returnBook(Long id) {
+        // 반납 확인
+        Optional<Loan> returnLoan = loanRepository.findByIdAndLoanStatus(id, true);
+
+        if (returnLoan.isPresent()) {
+            System.out.println("returnLoan = " + returnLoan);
+            throw new CustomDuplicatedException("이미 반납된 책입니다.");
+        }
+
+        // 대여 확인
+        Loan findLoan = loanRepository.findById(id)
+                .orElseThrow(() -> new CustomDuplicatedException("대여되지 않은 책입니다."));
+        findLoan.update(true);
+
+        return ResponseEntity.status(HttpStatus.OK).body("반납에 성공했습니다.");
     }
 
     private boolean isLoanAlreadyExists(Long userId, Long bookId) {

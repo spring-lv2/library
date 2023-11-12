@@ -2,15 +2,16 @@ package com.sparta.springlv2.exception;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
 public class ErrorMessage {
     private String message;
-    private int status;
+    private HttpStatus error;
 
-    public ErrorMessage(String message, int status) {
+    public ErrorMessage(String message, HttpStatus error) {
         this.message = message;
-        this.status = status;
+        this.error = error;
     }
 }

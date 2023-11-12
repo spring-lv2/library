@@ -13,7 +13,7 @@ public class CustomExceptionHandler {
     @ExceptionHandler(CustomDuplicatedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
     public ResponseEntity<?> handleUserDuplicatedException(CustomDuplicatedException ex) {
-        ErrorMessage errorMessage = new ErrorMessage(ex.getMessage(), 400);
+        ErrorMessage errorMessage = new ErrorMessage(ex.getMessage(), HttpStatus.BAD_REQUEST);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 

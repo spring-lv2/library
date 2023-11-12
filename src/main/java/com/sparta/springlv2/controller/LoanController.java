@@ -17,7 +17,12 @@ public class LoanController {
     }
 
     @PostMapping("/book")
-    public ResponseEntity loanBook(@RequestBody LoanRequestDto loanRequestDto){
+    public ResponseEntity loanBook(@RequestBody LoanRequestDto loanRequestDto) {
         return loanService.loanBook(loanRequestDto);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity returnBook(@PathVariable Long id) {
+        return loanService.returnBook(id);
     }
 }

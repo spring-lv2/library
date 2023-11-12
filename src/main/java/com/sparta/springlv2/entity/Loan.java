@@ -39,4 +39,8 @@ public class Loan {
         this.userId = loanRequestDto.getUserId();
         this.bookId = loanRequestDto.getBookId();
     }
+
+    public void update(boolean loanStatus) {
+        this.loanStatus = loanStatus;
+    }
 }

@@ -1,4 +1,4 @@
-package com.sparta.springlv2.dto;
+package com.sparta.springlv2.dto.book;
 
 import com.sparta.springlv2.entity.Book;
 import lombok.Getter;

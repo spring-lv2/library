@@ -32,8 +32,8 @@ public class EntityTest {
         User user = new User();
         user.setUsername("TestUser");
         user.setGender('M');
-        user.setUser_number("230101");
-        user.setPhone_number("010-1234-1234");
+        user.setUserNumber("230101");
+        user.setPhoneNumber("010-1234-1234");
         user.setAddress("동네집");
 
         userRepository.save(user);

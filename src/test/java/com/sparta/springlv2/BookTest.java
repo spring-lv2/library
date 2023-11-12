@@ -1,8 +1,8 @@
 package com.sparta.springlv2;
 
 import com.sparta.springlv2.controller.BookController;
-import com.sparta.springlv2.dto.BookRequestDto;
-import com.sparta.springlv2.dto.BookResponseDto;
+import com.sparta.springlv2.dto.book.BookRequestDto;
+import com.sparta.springlv2.dto.book.BookResponseDto;
 import com.sparta.springlv2.entity.Book;
 import com.sparta.springlv2.repository.BookRepository;
 import com.sparta.springlv2.service.BookService;
@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @WebMvcTest(BookController.class) // 컨트롤러를 테스트 하기 위해서 HTTP 호출 제공

@@ -1,6 +1,6 @@
 package com.sparta.springlv2.entity;
 
-import com.sparta.springlv2.dto.BookRequestDto;
+import com.sparta.springlv2.dto.book.BookRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

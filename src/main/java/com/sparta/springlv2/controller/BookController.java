@@ -1,10 +1,9 @@
 package com.sparta.springlv2.controller;
 
 
-import com.sparta.springlv2.dto.BookRequestDto;
-import com.sparta.springlv2.dto.BookResponseDto;
+import com.sparta.springlv2.dto.book.BookRequestDto;
+import com.sparta.springlv2.dto.book.BookResponseDto;
 import com.sparta.springlv2.service.BookService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

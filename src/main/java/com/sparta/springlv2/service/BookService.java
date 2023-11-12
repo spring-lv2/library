@@ -1,7 +1,7 @@
 package com.sparta.springlv2.service;
 
-import com.sparta.springlv2.dto.BookRequestDto;
-import com.sparta.springlv2.dto.BookResponseDto;
+import com.sparta.springlv2.dto.book.BookRequestDto;
+import com.sparta.springlv2.dto.book.BookResponseDto;
 import com.sparta.springlv2.entity.Book;
 import com.sparta.springlv2.repository.BookRepository;
 import org.springframework.stereotype.Service;

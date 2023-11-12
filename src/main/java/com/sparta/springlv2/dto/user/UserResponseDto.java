@@ -8,7 +8,6 @@ public class UserResponseDto {
     private Long id;
     private String userName;
     private char gender;
-
     private String phoneNumber;
     private String address;
 

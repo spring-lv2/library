@@ -3,7 +3,7 @@ package com.sparta.springlv2.service;
 import com.sparta.springlv2.dto.user.UserRequestDto;
 import com.sparta.springlv2.dto.user.UserResponseDto;
 import com.sparta.springlv2.entity.User;
-import com.sparta.springlv2.exception.CustomDuplicatedException;
+import com.sparta.springlv2.exception.CustomBadRequestException;
 import com.sparta.springlv2.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class UserService {
         // 핸드폰, 주민번호 존재 확인
         if (userRepository.findByUserNumber(user.getUserNumber()) != null ||
                 userRepository.findByPhoneNumber(user.getPhoneNumber()) != null) {
-            throw new CustomDuplicatedException("이미 존재하는 회원입니다.");
+            throw new CustomBadRequestException("이미 존재하는 회원입니다.");
         }
 
         // DB 저장

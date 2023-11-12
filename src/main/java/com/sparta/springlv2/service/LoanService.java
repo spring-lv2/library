@@ -1,23 +1,36 @@
 package com.sparta.springlv2.service;
 
+import com.sparta.springlv2.dto.book.BookResponseDto;
 import com.sparta.springlv2.dto.loan.LoanRequestDto;
+import com.sparta.springlv2.dto.loan.LoanResponseDto;
+import com.sparta.springlv2.entity.Book;
 import com.sparta.springlv2.entity.Loan;
-import com.sparta.springlv2.exception.CustomDuplicatedException;
+import com.sparta.springlv2.entity.User;
+import com.sparta.springlv2.exception.CustomBadRequestException;
+import com.sparta.springlv2.repository.BookRepository;
 import com.sparta.springlv2.repository.LoanRepository;
+import com.sparta.springlv2.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LoanService {
 
     private final LoanRepository loanRepository;
+    private final BookRepository bookRepository;
+    private final UserRepository userRepository;
 
-    public LoanService(LoanRepository loanRepository) {
+    public LoanService(LoanRepository loanRepository, BookRepository bookRepository, UserRepository userRepository) {
         this.loanRepository = loanRepository;
+        this.bookRepository = bookRepository;
+        this.userRepository = userRepository;
     }
 
     public ResponseEntity loanBook(LoanRequestDto loanRequestDto) {
@@ -29,7 +42,7 @@ public class LoanService {
 
         // 대여 확인
         if (isLoanAlreadyExists(userId, bookId)) {
-            throw new CustomDuplicatedException("이미 대여된 책입니다.");
+            throw new CustomBadRequestException("이미 대여된 책입니다.");
         }
 
         // DB 저장
@@ -45,21 +58,50 @@ public class LoanService {
 
         if (returnLoan.isPresent()) {
             System.out.println("returnLoan = " + returnLoan);
-            throw new CustomDuplicatedException("이미 반납된 책입니다.");
+            throw new CustomBadRequestException("이미 반납된 책입니다.");
         }
 
         // 대여 확인
         Loan findLoan = loanRepository.findById(id)
-                .orElseThrow(() -> new CustomDuplicatedException("대여되지 않은 책입니다."));
+                .orElseThrow(() -> new CustomBadRequestException("대여되지 않은 책입니다."));
         findLoan.update(true);
 
         return ResponseEntity.status(HttpStatus.OK).body("반납에 성공했습니다.");
     }
 
+    public List<LoanResponseDto> getLoanBookList() {
+        List<Loan> loans = loanRepository.findByLoanStatusOrderByLoanDateAsc(false); // 추가 구현 : 반납 완료 제외
+        List<LoanResponseDto> loanResponseDtos = new ArrayList<>();
+
+        for (Loan loan : loans) {
+            Long userId = loan.getUserId();
+            System.out.println("userId = " + userId);
+            Long bookId = loan.getBookId();
+            System.out.println("bookId = " + bookId);
+
+            // 유저 정보 가져오기
+            User user = userRepository.findById(userId).orElseThrow(() -> new CustomBadRequestException("유저가 존재하지 않습니다."));
+            // 책 제목, 저자 가져오기
+            Book book = bookRepository.findById(bookId).orElseThrow(() -> new CustomBadRequestException("책이 존재하지 않습니다."));
+            // 유저, 책, 대여 객체로 만들기
+            LoanResponseDto loanResponseDto = new LoanResponseDto();
+
+            loanResponseDto.setUserName(user.getUserName());
+            loanResponseDto.setPhoneNumber(user.getPhoneNumber());
+            loanResponseDto.setBookTitle(book.getTitle());
+            loanResponseDto.setBookAuthor(book.getAuthor());
+            loanResponseDto.setLoanDate(loan.getLoanDate());
+
+            loanResponseDtos.add(loanResponseDto);
+        }
+
+        return loanResponseDtos;
+    }
+
     private boolean isLoanAlreadyExists(Long userId, Long bookId) {
         // 해당 UserId와 BookId로 대출 내역을 조회
         Optional<Loan> existingLoan = loanRepository.findByUserIdAndBookIdAndLoanStatus(userId, bookId, false);
-
+        System.out.println("existingLoan = " + existingLoan);
         // 대출 내역이 이미 존재하면 true, 아니면 false 반환
         return existingLoan.isPresent();
     }

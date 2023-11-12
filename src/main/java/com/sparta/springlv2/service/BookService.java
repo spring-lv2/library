@@ -29,4 +29,12 @@ public class BookService {
     public List<BookResponseDto> getBookList() {
         return bookRepository.findAllByOrderByPubDateAsc().stream().map(BookResponseDto::new).toList();
     }
+
+    public BookResponseDto getBook(Long id) {
+        return new BookResponseDto(findBook(id));
+    }
+
+    private Book findBook(Long id) {
+        return bookRepository.findById(id).orElseThrow();
+    }
 }

@@ -29,4 +29,9 @@ public class BookController {
         return bookService.getBookList();
     }
 
+    @GetMapping("/{id}")
+    public BookResponseDto getBook(@PathVariable Long id) {
+        return bookService.getBook(id);
+    }
+
 }

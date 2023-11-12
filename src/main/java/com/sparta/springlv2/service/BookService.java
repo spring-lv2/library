@@ -6,6 +6,8 @@ import com.sparta.springlv2.entity.Book;
 import com.sparta.springlv2.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookService {
 
@@ -21,8 +23,10 @@ public class BookService {
         // DB 저장
         Book saveBook = bookRepository.save(book);
 
-        BookResponseDto bookResponseDto = new BookResponseDto(saveBook);
-        System.out.println("bookResponseDto = " + bookResponseDto);
         return new BookResponseDto(saveBook);
+    }
+
+    public List<BookResponseDto> getBookList() {
+        return bookRepository.findAllByOrderByPubDateAsc().stream().map(BookResponseDto::new).toList();
     }
 }

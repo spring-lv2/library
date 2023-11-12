@@ -22,8 +22,10 @@ public class Loan {
     @Column
     private Boolean loan_status = false;
     @CreationTimestamp
-    private LocalDateTime loan_date;
+    @Column(name = "loan_date")
+    private LocalDateTime loanDate;
     @UpdateTimestamp
-    private LocalDateTime return_date;
+    @Column(name = "return_date")
+    private LocalDateTime returnDate;
 
 }

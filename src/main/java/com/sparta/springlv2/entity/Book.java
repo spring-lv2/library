@@ -21,7 +21,8 @@ public class Book {
     private String author;
     private String publisher;
     @CreationTimestamp
-    private LocalDateTime pub_date;
+    @Column(name = "pub_date")
+    private LocalDateTime pubDate;
 
     public Book() {
 

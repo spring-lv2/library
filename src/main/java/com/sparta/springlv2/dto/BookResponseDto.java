@@ -12,7 +12,7 @@ public class BookResponseDto {
     private String author;
     private String language;
     private String publisher;
-    private LocalDateTime pub_date;
+    private LocalDateTime pubDate;
 
 
     public BookResponseDto(Book book){
@@ -21,6 +21,6 @@ public class BookResponseDto {
         this.author = book.getAuthor();
         this.language = book.getLanguage();
         this.publisher = book.getPublisher();
-        this.pub_date = book.getPub_date();
+        this.pubDate = book.getPubDate();
     }
 }

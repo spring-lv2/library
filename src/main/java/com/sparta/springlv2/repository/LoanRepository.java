@@ -13,4 +13,6 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
     Optional<Loan> findByIdAndLoanStatus(Long id, boolean loanStatus);
 
     List<Loan> findByLoanStatusOrderByLoanDateAsc(boolean loanStatus);
+
+    Optional<Loan> findByBookIdAndLoanStatus(Long bookId, boolean loanStatus);
 }

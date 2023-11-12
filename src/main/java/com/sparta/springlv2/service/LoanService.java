@@ -1,6 +1,5 @@
 package com.sparta.springlv2.service;
 
-import com.sparta.springlv2.dto.book.BookResponseDto;
 import com.sparta.springlv2.dto.loan.LoanRequestDto;
 import com.sparta.springlv2.dto.loan.LoanResponseDto;
 import com.sparta.springlv2.entity.Book;
@@ -17,11 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class LoanService {
@@ -44,7 +41,8 @@ public class LoanService {
         Long bookId = loan.getBookId();
 
         // 대여 확인
-        if (isLoanAlreadyExists(userId, bookId)) {
+        Optional<Loan> loanStatus = loanRepository.findByBookIdAndLoanStatus(bookId, false);
+        if (loanStatus.isPresent()) { // 5번 추가 구현
             throw new CustomBadRequestException("이미 대여된 책입니다.");
         }
 

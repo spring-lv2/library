@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +48,17 @@ public class LoanService {
             throw new CustomBadRequestException("이미 대여된 책입니다.");
         }
 
+        // 패널티 날짜 확인
+        User user = userRepository.findByIdAndPenalty(userId, true);
+        System.out.println("user = " + user);
+        if (user != null) {
+            if (user.getPenaltyDate().isAfter(LocalDateTime.now())) { // 현재 시간과 패널티 시간 비교
+                throw new CustomBadRequestException("패널티 상태입니다. 2주 동안 대여하실 수 없습니다.");
+            } else {
+                // 패널티 해제
+                user.releasePenalty();
+            }
+        }
         // DB 저장
         loanRepository.save(loan);
 
@@ -56,7 +70,7 @@ public class LoanService {
         // 반납 확인
         Optional<Loan> returnLoan = loanRepository.findByIdAndLoanStatus(id, true);
 
-        if (returnLoan.isPresent()) {
+        if (returnLoan.isPresent()) { // 값이 없다면
             System.out.println("returnLoan = " + returnLoan);
             throw new CustomBadRequestException("이미 반납된 책입니다.");
         }
@@ -64,7 +78,21 @@ public class LoanService {
         // 대여 확인
         Loan findLoan = loanRepository.findById(id)
                 .orElseThrow(() -> new CustomBadRequestException("대여되지 않은 책입니다."));
-        findLoan.update(true);
+
+        // 반납 패널티 확인
+        LocalDateTime loanDate = findLoan.getLoanDate();
+        LocalDateTime now = LocalDateTime.now();
+
+        Duration duration = Duration.between(loanDate, now); // 날짜간 차이
+
+        if (duration.toDays() > 7) {
+            Long userId = findLoan.getUserId();
+            // 유저 정보 가져오기
+            User user = userRepository.findById(userId).orElseThrow(() -> new CustomBadRequestException("유저가 존재하지 않습니다."));
+            user.penalty(); // 패널티 부여 (2주)
+        }
+
+        findLoan.update(true); // 반납 완료
 
         return ResponseEntity.status(HttpStatus.OK).body("반납에 성공했습니다.");
     }

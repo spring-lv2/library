@@ -7,6 +7,8 @@ import com.sparta.springlv2.exception.CustomBadRequestException;
 import com.sparta.springlv2.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -21,8 +23,9 @@ public class UserService {
         User user = new User(userRequestDto);
 
         // 핸드폰, 주민번호 존재 확인
-        if (userRepository.findByUserNumber(user.getUserNumber()) != null ||
-                userRepository.findByPhoneNumber(user.getPhoneNumber()) != null) {
+        Optional<User> duplicatedUser = userRepository
+                .findByUserNumberAndPhoneNumber(user.getUserNumber(), user.getPhoneNumber());
+        if (duplicatedUser.isPresent()) {
             throw new CustomBadRequestException("이미 존재하는 회원입니다.");
         }
 

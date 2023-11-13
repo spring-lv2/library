@@ -13,6 +13,7 @@ public class BookResponseDto {
     private String language;
     private String publisher;
     private LocalDateTime pubDate;
+    private String loanStatus;
 
 
     public BookResponseDto(Book book){

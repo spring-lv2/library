@@ -13,16 +13,4 @@ public class LoanResponseDto {
     private String bookTitle;
     private String bookAuthor;
     private LocalDateTime loanDate;
-
-    public LoanResponseDto() {
-
-    }
-
-    public LoanResponseDto(LoanResponseDto loanResponseDto) {
-        this.userName = loanResponseDto.getUserName();
-        this.phoneNumber = loanResponseDto.getPhoneNumber();
-        this.bookTitle = loanResponseDto.getBookTitle();
-        this.bookAuthor = loanResponseDto.getBookAuthor();
-        this.loanDate = loanResponseDto.getLoanDate();
-    }
 }

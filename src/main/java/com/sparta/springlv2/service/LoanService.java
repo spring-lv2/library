@@ -101,9 +101,7 @@ public class LoanService {
 
         for (Loan loan : loans) {
             Long userId = loan.getUserId();
-            System.out.println("userId = " + userId);
             Long bookId = loan.getBookId();
-            System.out.println("bookId = " + bookId);
 
             // 유저 정보 가져오기
             User user = userRepository.findById(userId).orElseThrow(() -> new CustomBadRequestException("유저가 존재하지 않습니다."));
@@ -122,13 +120,5 @@ public class LoanService {
         }
 
         return loanResponseDtos;
-    }
-
-    private boolean isLoanAlreadyExists(Long userId, Long bookId) {
-        // 해당 UserId와 BookId로 대출 내역을 조회
-        Optional<Loan> existingLoan = loanRepository.findByUserIdAndBookIdAndLoanStatus(userId, bookId, false);
-        System.out.println("existingLoan = " + existingLoan);
-        // 대출 내역이 이미 존재하면 true, 아니면 false 반환
-        return existingLoan.isPresent();
     }
 }

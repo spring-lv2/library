@@ -33,6 +33,7 @@ public class LoanService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public ResponseEntity loanBook(LoanRequestDto loanRequestDto) {
         // RequestDto -> Entity
         Loan loan = new Loan(loanRequestDto);

@@ -1,11 +1,11 @@
 package com.sparta.springlv2.repository;
 
+import com.sparta.springlv2.dto.book.joinBookResponseDto;
 import com.sparta.springlv2.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -13,9 +13,17 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByOrderByPubDateAsc();
 
-    @Query("SELECT b FROM Book b LEFT JOIN Loan l ON l.bookId = b.id " +
-            "ORDER BY b.id, l.loanDate DESC")
-    List<Book> findAllBooksWithLatestLoanStatus();
+    /*
+    @Query("SELECT ranked.id, ranked.title, ranked.author, ranked.language, ranked.publisher, ranked.pubDate, ranked.loanStatus " +
+            "FROM ( " +
+                "SELECT b.id, b.title, b.author, b.language, b.publisher, b.pubDate, l.loanStatus, " +
+                "ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY l.loanDate DESC) as row_num " +
+                "FROM Book b " +
+                "LEFT JOIN Loan l ON l.bookId = b.id " +
+            ") AS ranked " +
+            "WHERE ranked.row_num = 1")
+    List<joinBookResponseDto> joinBook();*/
+
     /*
     SELECT id, title, author, language, publisher, pub_date, loan_status
     FROM (
